@@ -1,19 +1,21 @@
 package datastruture;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class LinkedList<T> {
-	 private Node<T> head;
-	    private int size;
+	 public Node<T> head;
+	    public int size;
 	    
-	    private static class Node<T> {
-	        private T data;
-	        private Node<T> next;
+	    public static class Node<T> {
+	        public T data;
+	        public Node<T> next;
 	        
 	        public Node(T data) {
 	            this.data = data;
 	            this.next = null;
 	        }
+	        public Node() {}
 	    }
 	    
 	    public LinkedList() {
@@ -98,4 +100,98 @@ public class LinkedList<T> {
 	        list.removeLast();
 	        list.printList();
 	    }
+
+		public static Node<Integer> findMidleNode(LinkedList<Integer> linkedList) {
+			Node<Integer> runnerSlow = linkedList.head;
+			Node<Integer>  runnerFast = linkedList.head;
+			
+			while(runnerFast.next != null && runnerFast.next.next !=null) {
+				runnerSlow = runnerSlow.next;
+				runnerFast = runnerFast.next.next;
+			}
+			
+			return runnerSlow;
+		}
+
+		public static void printListWithRecursion(Node<Integer> node) {
+			if(node !=null) {
+				System.out.println(node.data);
+				printListWithRecursion(node.next);
+			}
+		}
+
+		public static int sizeWithRecursion(Node<Integer> node) {
+			if(node == null) {
+				return 0;
+			} 
+			return 1 + sizeWithRecursion(node.next);
+		}
+
+		public static int sumWithRecursion(Node<Integer> node) {
+			if(node == null) {
+				return Integer.MIN_VALUE;
+			}
+			int current = node.data;
+			int nextMaxValue = sumWithRecursion(node.next);
+			return Math.max(current, nextMaxValue);
+		}
+		
+		public static Node<Integer> addTwoNumbers(Node<Integer> l1, Node<Integer> l2) {
+			Node<Integer> dummy = new Node();
+			Node<Integer> current = dummy;
+		    int carry = 0;
+		    
+		    while (l1 != null || l2 != null || carry > 0) {
+		        int sum = carry;
+		        
+		        if (l1 != null) {
+		            sum += l1.data;
+		            l1 = l1.next;
+		        }
+		        
+		        if (l2 != null) {
+		            sum += l2.data;
+		            l2 = l2.next;
+		        }
+		        
+		        carry = sum / 10;
+		        sum = sum % 10;
+		        
+		        current.next = new Node(sum);
+		        current = current.next;
+		    }
+		    
+		    return reverse(dummy.next);
+		}
+
+		public static Node reverse(Node head) {
+			  Node<Integer> current = head;
+			  Node<Integer>  previous = null;
+			  Node<Integer>  next = null;
+			    
+			    while (current != null) {
+			        next = current.next;
+			        current.next = previous;
+			        previous = current;
+			        current = next;
+			    }
+			    
+			    return previous;
+		}
+
+		public static boolean checkIfIsAPalindrome(Node<Character> head) {
+			 Node nodeReversed = reverse(head);
+			 
+			 while(head != null) {
+				 if(head.data != nodeReversed.data) {
+					 return false;
+				 }
+				 head = head.next;
+				 nodeReversed = nodeReversed.next;
+			 }
+			 
+			return true;
+		}
+
+
 }
